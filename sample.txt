@@ -1,0 +1,11 @@
+Sample Text in Latin and Arabic Scripts
+
+Latin Script:
+Bonjour! Je m'appelle Claude. J'aime beaucoup la langue française. C'est une belle langue avec une riche histoire. Aujourd'hui, il fait beau et je vais me promener dans le parc. J'espère que vous passez une excellente journée!
+
+Arabic Script:
+!بوَنجور جۏ ماپىل كلوَد
+جىم بوَكوپْ لا لانغ فرانسىز
+سىت ۊن بىل لانغ اڤىك ۊن ريش يستوار
+وَجوردۊي يل فىتْ بوَزْ ىتْ جۏ ڤىزْ مۏ پروَمۏنىرْ دانسْ لۏ پارك
+جىسپىر كۏ ڤوزْ پاسىزْ ۊن ىكسىلانت جورنى

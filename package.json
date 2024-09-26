@@ -1,0 +1,14 @@
+{
+  "name": "le-jamiade",
+  "version": "1.0.0",
+  "description": "A tool to transliterate French text to Arabic script",
+  "main": "transliterate.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^27.5.1"
+  }
+}

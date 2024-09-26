@@ -1,0 +1,140 @@
+2024-09-26 13:02:36 - Translated specifications.md to README.md in French
+- Created README.md file with French translation of specifications
+- Original specifications.md file remains unchanged
+
+2024-09-26 20:16:38 - Updated transliterate.js
+- Added missing code at line 61 to handle series of different consonants at the end of a word
+- Implemented the rule: "If a series of different consonants are next to each other at the end of a word, keep only the last one"
+- Added the following code: result = result.replace(/([bdfghjklmnprstvxz]{2,})(?=\b)/g, (match) => match.slice(-1));
+
+2024-09-26 21:06:41 - Updated transliterate.js
+- Added missing code at the end of the transliterate function
+- Implemented the final step of transliteration: replacing remaining letters with their corresponding Arabic letters
+- Added the following code: 
+  result = result.split('').map(char => letterMap[char] || char).join('');
+- This change completes the transliteration process by handling any remaining untransliterated letters
+
+2024-09-27 10:30:15 - Comprehensive update to the web page
+- Updated index.html:
+  - Added new sections for letter mappings, digraphs, and special rules
+  - Included a table for examples of transliteration
+- Updated styles.css:
+  - Improved overall layout and styling
+  - Added responsive design for better mobile experience
+- Updated script.js:
+  - Enhanced transliteration function to handle all specified rules
+  - Added function to populate examples table dynamically
+  - Improved real-time transliteration functionality
+- These changes provide a comprehensive explanation of the Jamiade system and improve user interaction with the transliteration tool
+
+2024-09-27 14:45:22 - Added clarifications and examples to improve understanding
+- Updated index.html:
+  - Added "Prononciation" and "Exemple" columns to the letter mapping and digraphs tables
+  - Provided clear explanations of sounds using familiar French words
+  - Added examples of French words and their Jamiade transliteration for each letter and digraph
+  - Updated the "Règles Spéciales" section with examples for each rule
+- Updated styles.css:
+  - Adjusted table styles to accommodate the new four-column structure
+  - Improved readability of Arabic text
+  - Enhanced overall table appearance for better user experience
+  - Improved responsiveness for various screen sizes
+- These changes make the Jamiade system more accessible and understandable for users who may not be familiar with IPA symbols
+
+2024-09-27 16:30:45 - Added homophones to the digraphs section
+- Updated index.html:
+  - Modified the "Digrammes et Sons Spéciaux" section to "Digrammes, Sons Spéciaux et Homophones"
+  - Added a new "Homophones" column to the digraphs table
+  - Included relevant homophones for each digraph based on the specifications and common French language knowledge
+- This update provides users with additional information about alternative spellings that produce the same sounds, enhancing their understanding of the French phonetic system and its representation in Jamiade
+
+2024-09-27 01:12:11 - Updated script.js to generate random examples
+- Removed hard-coded examples array
+- Added generateRandomExample() function to create random French sentences
+- Modified populateExamples() function to use generateRandomExample() instead of hard-coded examples
+- This change ensures that no hard-coded examples are present in the webpage, as per the task requirement
+- Random example generation provides a wider variety of sentences for users to see transliterated, enhancing the learning experience
+
+2024-09-27 01:16:32 - Removed all hard-coded examples and implemented dynamic generation
+- Updated index.html:
+  - Removed hard-coded examples from letter mapping and digraphs tables
+  - Prepared HTML structure for dynamic content generation
+- Updated script.js:
+  - Added new functions: generateLetterMappingExample(), populateLetterMapping(), getPronunciation(), generateDigraphExample(), populateDigraphs(), and populateSpecialRules()
+  - Modified DOMContentLoaded event listener to call new functions
+  - Implemented dynamic generation of examples for letter mapping, digraphs, and special rules
+- These changes ensure that all examples throughout the webpage are generated dynamically, eliminating any remaining hard-coded examples
+- Dynamic generation allows for a wider variety of examples and ensures consistency between the transliteration logic and the displayed examples
+
+2024-09-27 02:30:45 - Fixed error in generateDigraphExample function
+- Updated script.js:
+  - Modified generateDigraphExample function to handle potential undefined cases
+  - Added a check to ensure we only try to generate an example if we have words for that digraph
+  - Updated the function to return a message if no example is available for a given digraph
+- This change resolves the "Cannot read properties of undefined (reading 'length')" error that was occurring in the console
+- The fix ensures that the digraph examples are generated without errors, improving the overall stability of the webpage
+
+2024-09-27 17:45:23 - Updated script.js to display only letters up to Z in the letter mapping table
+- Modified the populateLetterMapping() function:
+  - Introduced a new constant 'alphabet' containing letters from 'a' to 'z'
+  - Changed the iteration to use this 'alphabet' instead of directly using the letterMap object
+  - Added a condition to only create table rows for letters that exist in both the alphabet and the letterMap
+- This change ensures that only standard Latin alphabet letters (A to Z) are displayed in the table on the webpage
+- The full letterMap, including special characters, is still maintained for transliteration purposes
+- This update improves the clarity of the letter mapping display while preserving all necessary transliteration functionality
+
+2024-09-27 18:30:12 - Updated script.js to use dynamic examples in special rules
+- Modified the populateSpecialRules() function:
+  - Replaced hard-coded examples with dynamically generated ones using the transliterate() function
+  - Updated the structure of the specialRules array to include both rule descriptions and example generation
+  - Modified the way rules and examples are displayed in the HTML, ensuring each rule has a corresponding dynamically generated example
+- This change ensures that the special rules section uses examples that are always consistent with the current transliteration logic
+- Dynamic example generation in the special rules section improves the overall consistency and maintainability of the webpage
+
+2024-09-27 01:57:08 - Updated styles.css to add space between content and footer
+- Modified the body, main, and footer styles:
+  - Added flexbox layout to the body element to control overall page structure
+  - Increased padding at the bottom of the main content to create space above the footer
+  - Removed fixed positioning from the footer and used margin-top: auto to push it to the bottom
+- These changes create a more visually appealing layout with proper spacing between the main content and the footer
+- The footer now stays at the bottom of the page without overlapping content, improving overall user experience
+
+2024-09-27 01:59:10 - Redesigned the website with logo and new color scheme
+- Updated index.html:
+  - Added a logo container in the header
+  - Included the logo image in the header
+- Updated styles.css:
+  - Implemented a new color scheme with elegant and vibrant colors
+  - Added styles for the logo in the header
+  - Updated the overall design to be more modern and visually appealing
+  - Improved typography by using the Poppins font family
+  - Enhanced the layout of sections and tables for better readability
+  - Improved responsive design for various screen sizes
+- These changes create a more professional and engaging look for the Le Jamiade website, incorporating the logo and using a fresh, vibrant color palette
+
+2024-09-27 02:10:15 - Removed logo and adjusted styling
+- Updated index.html:
+  - Removed the logo container and image from the header
+- Updated styles.css:
+  - Removed logo-related styles
+  - Adjusted header styling to account for the removal of the logo
+  - Maintained the elegant and vibrant color scheme
+  - Kept the improved typography and layout enhancements
+- These changes simplify the design while maintaining the modern and visually appealing look of the Le Jamiade website
+
+2024-09-27 02:07:41 - Enhanced mobile responsiveness
+- Updated styles.css:
+  - Improved the navigation menu for mobile devices:
+    - Changed to a vertical layout for screens smaller than 480px
+    - Adjusted padding and margins for better touch interaction
+    - Added full-width styling to menu items for easier tapping
+  - Enhanced table responsiveness:
+    - Implemented a card-like layout for tables on small screens
+    - Added data-label attributes to table cells for better context on mobile
+    - Adjusted font sizes and padding for improved readability on small screens
+  - Optimized the layout of the transliteration input area:
+    - Stacked input and output areas vertically on mobile
+    - Adjusted height and margins for better use of space
+  - Fine-tuned responsive breakpoints:
+    - Added more specific media queries to handle various screen sizes more effectively
+    - Adjusted font sizes, padding, and margins across different breakpoints for optimal viewing
+- These changes significantly improve the user experience on mobile devices, making the website more accessible and easier to navigate on smaller screens
