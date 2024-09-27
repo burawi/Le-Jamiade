@@ -178,7 +178,7 @@ const extraFixes = {
   "سْ": "زْ"
 }
 
-function transliterate(text) {
+export function transliterate(text) {
   
   let result = text.toLowerCase();
 
@@ -189,8 +189,6 @@ function transliterate(text) {
     result = result.replace(new RegExp(word, 'g'), irrationalWords[word]);
   }
 
-
-
   // Ils verb
   result = result.replace(/(ils|elles) ([aàâæbcçdðeéèêëfghijklmnoôœpqrstuùûüvwxyzÿ]+)ent/g, '$1 $2t');
 
@@ -200,13 +198,17 @@ function transliterate(text) {
 
   result = result.replace(/ill/g, 'y');
 
+  result = result.replace(/ph/g, 'f');
+
   result = result.replace(/([^ ])tion\b/g, '$1śion');
 
   result = result.replace(/ss/g, 'ś');
 
-  result = result.replace(/([^ ])[bcçdðfghjklpqrstvwxz]t\b/g, (match, l1, l2) => `${l1}t`);
+  // Remove useless consonants at the end of a word
+  result = result.replace(/([^ ])[bcçdðfghjklpqrstvwxz]t( |$)/g, (match, l1, l2) => `${l1}t${l2}`);
 
-  result = result.replace(/\b([bcdfghjklmnpqrstvxz])e\b/g, '$1eu');
+  result = result.replace(/\bre/g, 'reu');
+  result = result.replace(/( |^)([bcdfghjklmnpqrstvxz])e( |$)/g, '$1$2eu$3');
   result = result.replace(/([bcdfghjklmnpqrstvxz]*)e([bcdfghjklmnpqrstvxz][aàâæeéèêëiîïoôœuùûüyÿ])/g, '$1eu$2');
 
   // Replace all Xs at the start of a word or following an "e" at the start of a word with "gz"
@@ -217,7 +219,7 @@ function transliterate(text) {
   result = result.replace(/x/g, 'ks');
 
   // Replace every e followed by a double consonant with é
-  result = result.replace(/e([bcdfghjklmnpqrstvxz]{2})/g, 'é$1');
+  result = result.replace(/e([bcdfghjklpqrstvxz]{2})/g, 'é$1');
 
   // S (surrounded by vowels) => Z
   result = result.replace(new RegExp(`([${extendedVowels}])s([${extendedVowels}])`, 'g'), '$1z$2');
@@ -247,9 +249,10 @@ function transliterate(text) {
   result = result.replace(/oy([aàâæeéèêëiîïoôœuùûüyÿ])/g, 'oiy$1');
   result = result.replace(/oy/g, 'oi');
 
-
   // Replace repeated consonants
   result = result.replace(/([bcdfghjklmnpqrstvxz])\1/g, '$1');
+
+  result = result.replace(/([^ ]{2,})es( |$)/g, '$1s$2');
   // End Normalization
 
   // Replace every "ou" with the corresponding letter
@@ -295,7 +298,7 @@ function transliterate(text) {
 
   // End Nasal Voices
 
-result = result.replace(/gne/g, diagraphMap['gn'] + "ّ");
+  result = result.replace(/gne/g, diagraphMap['gn'] + "ّ");
   result = result.replace(/gn/g, diagraphMap['gn']);
   result = result.replace(/oi/g, diagraphMap['oi']);
 
@@ -310,12 +313,9 @@ result = result.replace(/gne/g, diagraphMap['gn'] + "ّ");
   result = result.split('').map(char => letterMap[char] || char).join('');
 
   // Make the extra fixes
-  
   for(const [letterToFix, replacement] of Object.entries(extraFixes)) {
     result = result.replace(new RegExp(letterToFix, 'g'), replacement);
   }
 
   return result;
 }
-
-module.exports = transliterate;

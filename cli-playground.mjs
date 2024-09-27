@@ -1,5 +1,4 @@
-const transliterate = require('./transliterate');
-
+import { transliterate } from './transliterate.mjs';
 // Read text from args
 const text = process.argv.slice(2).join(' ');
 

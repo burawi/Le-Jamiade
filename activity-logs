@@ -138,3 +138,16 @@
     - Added more specific media queries to handle various screen sizes more effectively
     - Adjusted font sizes, padding, and margins across different breakpoints for optimal viewing
 - These changes significantly improve the user experience on mobile devices, making the website more accessible and easier to navigate on smaller screens
+
+2024-09-27 20:15:30 - Updated project to use ES6 modules for transliterate function
+- Modified transliterate.js:
+  - Changed the export syntax to use ES6 module: export function transliterate(text) { ... }
+- Updated script.js:
+  - Added import statement: import { transliterate } from './transliterate.js';
+  - Removed the transliterate function definition from script.js
+- Updated index.html:
+  - Removed the script tag for transliterate.js
+  - Added type="module" attribute to the script tag for script.js: <script type="module" src="script.js"></script>
+- These changes improve code organization by separating the transliterate function into its own module
+- The use of ES6 modules enhances maintainability and allows for better code reuse
+- This update ensures that the webpage gets the transliterate function from transliterate.js without duplicating the function in script.js
