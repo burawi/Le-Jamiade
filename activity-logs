@@ -151,3 +151,18 @@
 - These changes improve code organization by separating the transliterate function into its own module
 - The use of ES6 modules enhances maintainability and allows for better code reuse
 - This update ensures that the webpage gets the transliterate function from transliterate.js without duplicating the function in script.js
+
+2024-09-28 23:05:20 - Corrected French orthography in presentation.md
+- Updated presentation.md:
+  - Fixed various spelling and grammatical errors throughout the document
+  - Corrected accents and punctuation
+  - Improved overall readability and clarity of the French text
+- These changes enhance the quality and professionalism of the Jamiade presentation document
+- The corrections ensure that the French text accurately represents the Jamiade system and its concepts
+
+2024-09-28 23:16:17 - Fixed HTML error in index.html navigation menu
+- Updated index.html:
+  - Corrected the closing tag for the "Présentation" list item in the navigation menu
+  - Changed '</ul>li>' to '</li>'
+- This fix resolves the HTML structure issue in the navigation menu
+- The correction ensures proper rendering of the navigation menu and improves overall HTML validity
