@@ -9,16 +9,15 @@
 </head>
 <body>
     <header>
-        <h1>Le Jamiade</h1>
-        <p>Ecrivons le Français en Abjad - ىكريڤوَنزْ لۏ فرانسىزْ ان ابجاد</p>
+        <img src="logo/cover.png" alt="Le Jamiade" class="logo">
+        <p>Ecrivons le Français en Abjad - <span lang="ar">ىكريڤوَنزْ لۏ فرانسىزْ ان ابجاد</span></p>
     </header>
 
     <nav>
         <ul>
             <li><a href="#transliteration">Essayez-le</a></li>
             <li><a href="#presentation">Présentation</a></li>
-            <li><a href="#letter-mapping">Correspondance</a></li>
-            <li><a href="#digraphs">Digrammes</a></li>
+            <li><a href="#resume">Résumé</a></li>
             <li><a href="#rules">Règles</a></li>
             <li><a href="#examples">Exemples</a></li>
         </ul>
@@ -29,7 +28,7 @@
             <h2>Essayez-le !</h2>
             <div class="input-area">
                 <textarea id="input" placeholder="Entrez votre texte en français ici..."></textarea>
-                <div id="output" class="output"></div>
+                <div id="output" class="output" lang="ar" dir="rtl"></div>
             </div>
         </section>
 
@@ -274,12 +273,12 @@
             </ul>
 
             <h4>N & M ن م</h4>
-            <p>On gardera néanmoins l'écriture du M qui remplace le N devant P et B dans les sons nasaux :</p>
+            <p>Même si le son nasal est suivi d'un P ou d'un B on écrira toujours ن </p>
             <ul>
-                <li>Sombre => سوَمبر</li>
-                <li>Chambre => شوَمبر</li>
-                <li>Timbre => تىمبر</li>
-                <li>Humble => ىَمبل</li>
+                <li>Sombre => سوَنبر</li>
+                <li>Chambre => شوَنبر</li>
+                <li>Timbre => تىنبر</li>
+                <li>Humble => ىَنبل</li>
             </ul>
 
             <h4>Note</h4>
@@ -290,37 +289,18 @@
             </ul>
         </section>
 
-        <section id="letter-mapping">
-            <h2>Correspondance des Lettres</h2>
-            <table id="letter-mapping-table">
+        <section id="resume">
+            <h2>Résumé de l'Abjad Jamiade</h2>
+            <table id="jamiade-letters">
                 <thead>
                     <tr>
-                        <th>Français</th>
-                        <th>Arabe</th>
+                        <th>Lettre Jamiade</th>
                         <th>Prononciation</th>
-                        <th>Exemple</th>
+                        <th>Utilisation</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Les exemples seront ajoutés dynamiquement par JavaScript -->
-                </tbody>
-            </table>
-        </section>
-
-        <section id="digraphs">
-            <h2>Digrammes, Sons Spéciaux et Homophones</h2>
-            <table id="digraphs-table">
-                <thead>
-                    <tr>
-                        <th>Français</th>
-                        <th>Arabe</th>
-                        <th>Prononciation</th>
-                        <th>Exemple</th>
-                        <th>Homophones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Les exemples seront ajoutés dynamiquement par JavaScript -->
+                    <!-- Le contenu sera ajouté dynamiquement par JavaScript -->
                 </tbody>
             </table>
         </section>

@@ -1,137 +1,150 @@
 // Import the transliterate function from transliterate.js
 import { transliterate } from './transliterate.mjs';
 
-// Fonction pour générer des exemples aléatoires
-function generateRandomExample() {
-  const subjects = ["Je", "Tu", "Il", "Elle", "Nous", "Vous", "Ils", "Elles"];
-  const verbs = ["suis", "es", "est", "sommes", "êtes", "sont", "ai", "as", "a", "avons", "avez", "ont", "vais", "vas", "va", "allons", "allez", "vont"];
-  const adjectives = ["heureux", "triste", "grand", "petit", "beau", "joli", "intelligent", "fort", "faible", "rapide", "lent"];
-  const nouns = ["maison", "voiture", "chat", "chien", "livre", "table", "chaise", "arbre", "fleur", "soleil"];
-  const adverbs = ["très", "peu", "beaucoup", "rapidement", "lentement", "bien", "mal", "souvent", "rarement"];
-
-  const randomElement = (array) => array[Math.floor(Math.random() * array.length)];
-
-  const structures = [
-    () => `${randomElement(subjects)} ${randomElement(verbs)} ${randomElement(adjectives)}.`,
-    () => `${randomElement(subjects)} ${randomElement(verbs)} ${randomElement(adverbs)} ${randomElement(adjectives)}.`,
-    () => `Le ${randomElement(nouns)} est ${randomElement(adjectives)}.`,
-    () => `${randomElement(subjects)} ${randomElement(verbs)} un ${randomElement(nouns)}.`,
-    () => `${randomElement(subjects)} ${randomElement(verbs)} ${randomElement(adverbs)}.`
+// Fonction pour obtenir les exemples de phrases françaises correctes
+function getExampleSentences() {
+  return [
+    "Le soleil brille dans le ciel bleu.",
+    "J'aime me promener dans la forêt.",
+    "Les oiseaux chantent au printemps.",
+    "La musique adoucit les mœurs.",
+    "L'eau coule sous le pont.",
+    "Les enfants jouent dans le parc.",
+    "Le chat dort sur le canapé.",
+    "Je lis un livre intéressant.",
+    "Nous mangeons au restaurant ce soir.",
+    "Elle peint un magnifique tableau."
   ];
-
-  return randomElement(structures)();
 }
 
 // Fonction pour peupler le tableau d'exemples
-function populateExamples() {
+async function populateExamples() {
   const exampleTable = document.getElementById('example-table').getElementsByTagName('tbody')[0];
-  for (let i = 0; i < 10; i++) {
-    const example = generateRandomExample();
+  const examples = getExampleSentences();
+  for (const example of examples) {
     const row = exampleTable.insertRow();
     const cell1 = row.insertCell(0);
     const cell2 = row.insertCell(1);
     cell1.textContent = example;
-    cell2.textContent = transliterate(example);
+    cell2.textContent = await transliterate(example);
   }
 }
 
-// Fonction pour générer des exemples pour la correspondance des lettres
-function generateLetterMappingExample(letter) {
+// Fonction pour générer des exemples pour le résumé des lettres
+async function generateLetterExample(jamiadeLetter, latinEquivalent) {
   const words = {
-    'a': ['ami', 'chat', 'arbre'],
-    'b': ['bon', 'bébé', 'bateau'],
-    'c': ['car', 'ciel', 'cou'],
-    'd': ['dent', 'doux', 'dur'],
-    'e': ['le', 'belle', 'petit'],
-    'f': ['feu', 'fort', 'fille'],
-    'g': ['gare', 'gel', 'gâteau'],
-    'h': ['homme', 'héros', 'heure'],
-    'i': ['lit', 'ici', 'île'],
-    'j': ['jeu', 'jour', 'joli'],
-    'k': ['kilo', 'kayak', 'koala'],
-    'l': ['lune', 'lit', 'loin'],
-    'm': ['maman', 'mer', 'main'],
-    'n': ['non', 'nuit', 'neuf'],
-    'o': ['mot', 'beau', 'chose'],
-    'p': ['papa', 'peur', 'porte'],
-    'q': ['quoi', 'qui', 'quatre'],
-    'r': ['rue', 'rire', 'rouge'],
-    's': ['sol', 'soir', 'sous'],
-    't': ['tu', 'tête', 'tout'],
-    'u': ['tu', 'lune', 'rue'],
-    'v': ['vent', 'vrai', 'voir'],
-    'w': ['kiwi', 'wagon', 'web'],
-    'x': ['taxi', 'exemple', 'axe'],
-    'y': ['yoga', 'type', 'yeux'],
-    'z': ['zoo', 'zéro', 'zone']
+    'ا': ['ami', 'chat', 'arbre'],
+    'ب': ['bon', 'bébé', 'bateau'],
+    'ت': ['tu', 'tête', 'tout'],
+    'د': ['dent', 'doux', 'dur'],
+    'ۏ': ['le', 'peur', 'petit'],
+    'ف': ['feu', 'fort', 'fille'],
+    'غ': ['gare', 'guerre', 'gâteau'],
+    'ه': ['homme', 'héros', 'heure'],
+    'ي': ['lit', 'ici', 'île'],
+    'ج': ['jeu', 'jour', 'joli'],
+    'ك': ['kilo', 'kayak', 'koala'],
+    'ل': ['lune', 'lit', 'loin'],
+    'م': ['maman', 'mer', 'main'],
+    'ن': ['non', 'nuit', 'neuf'],
+    'وَ': ['mot', 'beau', 'chose'],
+    'پ': ['papa', 'peur', 'porte'],
+    'ر': ['rue', 'rire', 'rouge'],
+    'س': ['sol', 'soir', 'sous'],
+    'ۊ': ['tu', 'lune', 'rue'],
+    'ڤ': ['vent', 'vrai', 'voir'],
+    'و': ['kiwi', 'wagon', 'web'],
+    'ى': ['mais', 'lait', 'vrai'],
+    'ز': ['zoo', 'zéro', 'zone']
   };
 
-  const letterWords = words[letter.toLowerCase()];
+  const letterWords = words[jamiadeLetter] || words[latinEquivalent.toLowerCase()];
   if (letterWords && letterWords.length > 0) {
     const word = letterWords[Math.floor(Math.random() * letterWords.length)];
-    return `${word} → ${transliterate(word)}`;
+    return `${word} → ${await transliterate(word)}`;
   } else {
-    return `No example available for '${letter}'`;
+    return `No example available for '${jamiadeLetter}'`;
   }
 }
 
-// Fonction pour peupler le tableau de correspondance des lettres
-function populateLetterMapping() {
-  const letterMappingTable = document.getElementById('letter-mapping-table');
-  if (!letterMappingTable) {
-    console.error("Couldn't find the letter-mapping-table element");
+// Fonction pour peupler le tableau de résumé des lettres
+async function populateLetterSummary() {
+  const letterSummaryTable = document.getElementById('jamiade-letters');
+  if (!letterSummaryTable) {
+    console.error("Couldn't find the jamiade-letters element");
     return;
   }
-  const tbody = letterMappingTable.getElementsByTagName('tbody')[0];
+  const tbody = letterSummaryTable.getElementsByTagName('tbody')[0];
   if (!tbody) {
-    console.error("Couldn't find the tbody element in letter-mapping-table");
+    console.error("Couldn't find the tbody element in jamiade-letters");
     return;
   }
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-  for (const letter of alphabet) {
+  const jamiadeLetters = [
+    { jamiade: 'ا', latin: 'A' },
+    { jamiade: 'ب', latin: 'B' },
+    { jamiade: 'ت', latin: 'T' },
+    { jamiade: 'د', latin: 'D' },
+    { jamiade: 'ۏ', latin: 'E' },
+    { jamiade: 'ف', latin: 'F' },
+    { jamiade: 'غ', latin: 'G' },
+    { jamiade: 'ه', latin: 'H' },
+    { jamiade: 'ي', latin: 'I' },
+    { jamiade: 'ج', latin: 'J' },
+    { jamiade: 'ك', latin: 'K' },
+    { jamiade: 'ل', latin: 'L' },
+    { jamiade: 'م', latin: 'M' },
+    { jamiade: 'ن', latin: 'N' },
+    { jamiade: 'وَ', latin: 'O' },
+    { jamiade: 'پ', latin: 'P' },
+    { jamiade: 'ر', latin: 'R' },
+    { jamiade: 'س', latin: 'S' },
+    { jamiade: 'ۊ', latin: 'U' },
+    { jamiade: 'ڤ', latin: 'V' },
+    { jamiade: 'و', latin: 'W' },
+    { jamiade: 'ى', latin: 'É' },
+    { jamiade: 'ز', latin: 'Z' }
+  ];
+
+  for (const { jamiade, latin } of jamiadeLetters) {
     const row = tbody.insertRow();
-    row.insertCell(0).textContent = letter.toUpperCase();
-    row.insertCell(1).textContent = transliterate(letter);
-    row.insertCell(2).textContent = getPronunciation(letter);
-    row.insertCell(3).textContent = generateLetterMappingExample(letter);
+    row.insertCell(0).textContent = jamiade;
+    row.insertCell(1).textContent = getPronunciation(jamiade, latin);
+    row.insertCell(2).textContent = await generateLetterExample(jamiade, latin);
   }
 }
 
 // Fonction pour obtenir la prononciation d'une lettre
-function getPronunciation(letter) {
+function getPronunciation(jamiadeLetter, latinEquivalent) {
   const pronunciations = {
-    'a': '[a] comme dans "chat"',
-    'b': '[b] comme dans "bon"',
-    'c': '[k] comme dans "car" ou [s] comme dans "ciel"',
-    'd': '[d] comme dans "dent"',
-    'e': '[ə] comme dans "le" ou [ɛ] comme dans "belle"',
-    'f': '[f] comme dans "feu"',
-    'g': '[g] comme dans "gare" ou [ʒ] comme dans "gel"',
-    'h': 'Muet ou [h] aspiré',
-    'i': '[i] comme dans "lit"',
-    'j': '[ʒ] comme dans "jeu"',
-    'k': '[k] comme dans "kilo"',
-    'l': '[l] comme dans "lune"',
-    'm': '[m] comme dans "maman"',
-    'n': '[n] comme dans "non"',
-    'o': '[o] comme dans "mot"',
-    'p': '[p] comme dans "papa"',
-    'q': '[k] comme dans "quoi"',
-    'r': '[ʁ] comme dans "rue"',
-    's': '[s] comme dans "sol"',
-    't': '[t] comme dans "tu"',
-    'u': '[y] comme dans "tu"',
-    'v': '[v] comme dans "vent"',
-    'w': '[w] comme dans "kiwi"',
-    'x': '[ks] comme dans "taxi" ou [gz] comme dans "exemple"',
-    'y': '[j] comme dans "yoga" ou [i] comme dans "type"',
-    'z': '[z] comme dans "zoo"'
+    'ا': '[a] comme dans "chat"',
+    'ب': '[b] comme dans "bon"',
+    'ت': '[t] comme dans "tu"',
+    'د': '[d] comme dans "dent"',
+    'ۏ': '[ə] comme dans "le" ou [œ] comme dans "peur"',
+    'ف': '[f] comme dans "feu"',
+    'غ': '[g] comme dans "gare"',
+    'ه': '[h] aspiré comme dans "héros"',
+    'ي': '[i] comme dans "lit"',
+    'ج': '[ʒ] comme dans "jeu"',
+    'ك': '[k] comme dans "kilo"',
+    'ل': '[l] comme dans "lune"',
+    'م': '[m] comme dans "maman"',
+    'ن': '[n] comme dans "non"',
+    'وَ': '[o] comme dans "mot"',
+    'پ': '[p] comme dans "papa"',
+    'ر': '[ʁ] comme dans "rue"',
+    'س': '[s] comme dans "sol"',
+    'ۊ': '[y] comme dans "tu"',
+    'ڤ': '[v] comme dans "vent"',
+    'و': '[u] comme dans "vous" ou [w] comme dans "kiwi"',
+    'ى': '[e] comme dans "été ou [ɛ] comme dans "mais"',
+    'ز': '[z] comme dans "zoo"'
   };
-  return pronunciations[letter.toLowerCase()] || '';
+  return pronunciations[jamiadeLetter] || `[${latinEquivalent.toLowerCase()}] comme dans "${latinEquivalent.toLowerCase()}at"`;
 }
 
 // Fonction pour générer des exemples pour les digrammes
-function generateDigraphExample(digraph) {
+async function generateDigraphExample(digraph) {
   const words = {
     'ou': ['vous', 'jour', 'tout'],
     'ch': ['chat', 'chien', 'chaud'],
@@ -150,14 +163,14 @@ function generateDigraphExample(digraph) {
   const digraphWords = words[digraph.toLowerCase()];
   if (digraphWords && digraphWords.length > 0) {
     const word = digraphWords[Math.floor(Math.random() * digraphWords.length)];
-    return `${word} → ${transliterate(word)}`;
+    return `${word} → ${await transliterate(word)}`;
   } else {
     return `No example available for '${digraph}'`;
   }
 }
 
 // Fonction pour peupler le tableau des digrammes
-function populateDigraphs() {
+async function populateDigraphs() {
   const digraphsTable = document.getElementById('digraphs-table').getElementsByTagName('tbody')[0];
   const digraphPronunciations = {
     'ou': '[u] comme dans "vous"',
@@ -179,7 +192,7 @@ function populateDigraphs() {
     'ph': '-',
     'eu': 'ŒU',
     'au': 'EAU, Ô',
-    'ai': 'È, Ê, É',
+    'ai': 'È, Ê, É',
     'on': '-',
     'an': 'EN',
     'in': 'AIN, EIN, YN',
@@ -187,52 +200,50 @@ function populateDigraphs() {
     'oi': 'oy',
     'gn': '-'
   };
-  const digraphs = ['ou', 'ch', 'ph', 'eu', 'au', 'ai', 'on', 'an', 'in', 'un', 'oi', 'gn'];
-  for (const digraph of digraphs) {
+  for (const [digraph, pronunciation] of Object.entries(digraphPronunciations)) {
     const row = digraphsTable.insertRow();
     row.insertCell(0).textContent = digraph.toUpperCase();
-    row.insertCell(1).textContent = transliterate(digraph);
-    row.insertCell(2).textContent = digraphPronunciations[digraph] || '';
-    row.insertCell(3).textContent = generateDigraphExample(digraph);
-    row.insertCell(4).textContent = digraphHomophones[digraph] || '';
+    row.insertCell(1).textContent = pronunciation;
+    row.insertCell(2).textContent = await generateDigraphExample(digraph);
+    row.insertCell(3).textContent = digraphHomophones[digraph] || '-';
   }
 }
 
 // Fonction pour peupler les règles spéciales
-function populateSpecialRules() {
+async function populateSpecialRules() {
   const specialRules = [
     {
       rule: "Toutes les voyelles sont écrites, il n'y a pas de voyelles courtes comme en arabe.",
-      example: "table → " + transliterate("table")
+      example: "table → " + await transliterate("table")
     },
     {
       rule: "Les voyelles muettes à la fin des mots sont omises.",
-      example: "table → " + transliterate("table")
+      example: "table → " + await transliterate("table")
     },
     {
       rule: "Les consonnes muettes à la fin des mots ont un ْ (Soukoune) au-dessus d'elles. Ces lettres sont gardées pour indiquer la liaison.",
-      example: "petit → " + transliterate("petit")
+      example: "petit → " + await transliterate("petit")
     },
     {
       rule: "Le S muet à la fin d'un mot s'écrit زْ puisque la liaison d'un s est toujours prononcée z.",
-      example: "les amis → " + transliterate("les amis")
+      example: "les amis → " + await transliterate("les amis")
     },
     {
       rule: "Toutes les lettres muettes qui précèdent une lettre muette à la fin du mot ne sont pas écrites.",
-      example: "temps → " + transliterate("temps")
+      example: "temps → " + await transliterate("temps")
     },
     {
       rule: "Les sons nasaux sont représentés par des combinaisons spécifiques de lettres arabes.",
-      example: "bon → " + transliterate("bon") + ", pain → " + transliterate("pain")
+      example: "bon → " + await transliterate("bon") + ", pain → " + await transliterate("pain")
     }
   ];
 
   const specialRulesList = document.getElementById('special-rules');
-  specialRules.forEach(({rule, example}) => {
+  for (const {rule, example} of specialRules) {
     const li = document.createElement('li');
     li.textContent = `${rule} Exemple : ${example}`;
     specialRulesList.appendChild(li);
-  });
+  }
 }
 
 // Translittération en temps réel
@@ -240,12 +251,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('input');
   const output = document.getElementById('output');
 
-  input.addEventListener('input', () => {
-    output.textContent = transliterate(input.value);
+  input.addEventListener('input', async () => {
+    output.textContent = await transliterate(input.value);
   });
 
   // Peupler les tableaux et les règles
-  populateLetterMapping();
+  populateLetterSummary();
   populateDigraphs();
   populateSpecialRules();
   populateExamples();

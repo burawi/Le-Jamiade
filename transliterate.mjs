@@ -1,321 +1,203 @@
+import { transliterate as transliteratePhonetically } from './transliteratePhonetically.mjs';
+
 const letterMap = {
   'a': 'ا',
   'b': 'ب',
-  'c': 'ك',
+  'k': 'ك',
   'd': 'د',
   'e': 'ى',
+  'ə': 'ۏ',
+  'ø': 'ۏَ',
+  'œ': 'ۏً',
+  'ɛ': 'ى',
   'f': 'ف',
   'g': 'غ',
   'i': 'ي',
-  'j': 'ج',
-  'k': 'ك',
+  'j': 'ي',
+  'ʒ': 'ج',
   'l': 'ل',
   'm': 'م',
   'n': 'ن',
+  'ɔ': 'وَ',
   'o': 'وَ',
   'p': 'پ',
   'q': 'ك',
-  'r': 'ر',
+  'ʁ': 'ر',
   's': 'س',
+  'ʃ': 'ش',
   't': 'ت',
-  'u': 'ۊ',
+  'u': 'و',
+  'y': 'ۊ',
+  'ɥ': 'ۊ',
   'v': 'ڤ',
   'w': 'و',
-  'y': 'ي',
   'z': 'ز',
-  "ş": "ش",
-  "ñ": "نّ",
-  "ğ": "غ", // This is a g that is pronounced as g forcely
-  "ĥ": "ه", // Aspired h
-  "ś": "س", // Forced s
+  'ɑ̃': 'ان',
+  'ɔ̃': 'وَن',
+  'ɛ̃': 'ىن',
+  'œ̃': 'ىَن',
+  'ɲ': 'ني',
+  'ْ': 'ْ', // sukun
 };
 
-const diagraphMap = {
-  'ou': 'و',
-  'eu': 'ۏ',
-  'au': 'وَ',
-  'ai': 'ى',
-  'on': 'وَن',
-  'om': 'وَم',
-  'an': 'ان',
-  'am': 'ام',
-  'in': 'ىن',
-  'im': 'ىم',
-  'un': 'ىَن',
-  'um': 'ىَم',
-  'oi': 'وا',
-  'gn': 'ني'
+const silentLetterMap = {
+  'g': 'غ',
+  'd': 'ت',
+  't': 'ت',
+  's': 'ز',
+  'x': 'ز',
+  'z': 'ز',
+  'p': 'پ',
 };
 
-const vowels = ['a', 'e', 'i', 'o', 'u', 'y'];
-const extendedVowels = "aàâæeéèêëiîïoôœuùûüyÿ";
-const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z'];
+function normalize(str) {
+  const accentMap = {
+    'à': 'a', 'â': 'a', 'ä': 'a', 'æ': 'ae',
+    'é': 'e', 'è': 'e', 'ê': 'e', 'ë': 'e',
+    'î': 'i', 'ï': 'i',
+    'ô': 'o', 'œ': 'oe', 'ö': 'o',
+    'ù': 'u', 'û': 'u', 'ü': 'u',
+    'ÿ': 'y',
+    'ç': 'c'
+  };
 
-const oBrothers = [ "au", "eau"];
-const aiBrothers = [ "ai", "é", "è", "ê", "ë"];
-const inBrothers = [ "in", "ein", "yn", "ain"];
-const imBrothers = [ "im", "eim", "ym", "aim"]
-const anBrothers = [ "an", "en"];
-const amBrothers = [ "am", "em"];
-
-const irrationalWords = {
-  femme: "famme",
-  wagon: "vagon",
-  six: "sis",
-  dix: "dis",
-  bruxelles: "bruselles",
-  bruxellois: "brusellois",
-  auxerre: "ausserre",
-  "agnat": "ağnat",
-  "agnathe": "ağnathe",
-  "agnosie": "ağnosie",
-  "agnostique": "ağnostique",
-  "agnus-castus": "ağnus-castus",
-  "agnus dei": "ağnus dei",
-  "cognation": "coğnation",
-  "cognitif": "coğnitif",
-  "cognition": "coğnition",
-  "diagnostic": "diağnostic",
-  "diagnostiquer": "diağnostiquer",
-  "gneiss": "ğneiss",
-  "gnète": "ğnète",
-  "gnome": "ğnome",
-  "gnomon": "ğnomon",
-  "gnose": "ğnose",
-  "gnou": "ğnou",
-  "magnum": "mağnum",
-  "pignoratif": "piğnoratif",
-  "prégnance": "préğnance",
-  "prognathie": "proğnathie",
-  "pugnace": "puğnace",
-  "sphagnales": "sphağnales",
-  "stagnant": "stağnant",
-  "stagner": "stağner",
-  "syngnathe": "synğnathe",
-  "wagnérien": "wağnérien",
-  "mille": "mile",
-  "million": "milion",
-  "milliard": "miliard",
-  "tranquille": "tranquile",
-  "ville": "vile",
-  "bacille": "bacile",
-  "grill": "gril",
-  "imbécillité": "imbécilité",
-  "capillaire": "capilaire",
-  "oscillation": "oscilation",
-  "hache": "ĥache",
-  "hagard": "ĥagard",
-  "haie": "ĥaie",
-  "haillon": "ĥaillon",
-  "haine": "ĥaine",
-  "haïr": "ĥaïr",
-  "hall": "ĥall",
-  "halo": "ĥalo",
-  "halte": "ĥalte",
-  "hamac": "ĥamac",
-  "hamburger": "ĥamburger",
-  "hameau": "ĥameau",
-  "hamster": "ĥamster",
-  "hanche": "ĥanche",
-  "handicap": "ĥandicap",
-  "hangar": "ĥangar",
-  "hanter": "ĥanter",
-  "happer": "ĥapper",
-  "harceler": "ĥarceler",
-  "hardi": "ĥardi",
-  "harem": "ĥarem",
-  "hareng": "ĥareng",
-  "harfang": "ĥarfang",
-  "hargne": "ĥargne",
-  "haricot": "ĥaricot",
-  "harnais": "ĥarnais",
-  "harpe": "ĥarpe",
-  "hasard": "ĥasard",
-  "hâte": "ĥâte",
-  "hausse": "ĥausse",
-  "haut": "ĥaut",
-  "havre": "ĥavre",
-  "hennir": "ĥennir",
-  "hérisser": "ĥérisser",
-  "hernie": "ĥernie",
-  "héron": "ĥéron",
-  "héros": "ĥéros",
-  "hêtre": "ĥêtre",
-  "heurter": "ĥeurter",
-  "hibou": "ĥibou",
-  "hic": "ĥic",
-  "hideur": "ĥideur",
-  "hiérarchie": "ĥiérarchie",
-  "hiéroglyphe": "ĥiéroglyphe",
-  "hippie": "ĥippie",
-  "hisser": "ĥisser",
-  "hocher": "ĥocher",
-  "hockey": "ĥockey",
-  "hollande": "ĥollande",
-  "homard": "ĥomard",
-  "honte": "ĥonte",
-  "hoquet": "ĥoquet",
-  "horde": "ĥorde",
-  "hors": "ĥors",
-  "hotte": "ĥotte",
-  "houblon": "ĥoublon",
-  "houle": "ĥoule",
-  "housse": "ĥousse",
-  "huard": "ĥuard",
-  "hublot": "ĥublot",
-  "huche": "ĥuche",
-  "huer": "ĥuer",
-  "huit": "ĥuit",
-  "humer": "ĥumer",
-  "hurler": "ĥurler",
-  "huron": "ĥuron",
-  "husky": "ĥusky",
-  "hutte": "ĥutte",
-  "hyène": "ĥyène"
+  return str.replace(/[àâäæéèêëîïôœöùûüÿç]/g, match => accentMap[match]);
 }
 
-const extraFixes = {
-  "سْ": "زْ"
+function extractPunctuation(word) {
+  const punctuation = word.match(/\p{P}$/gu) || [];
+  const cleanWord = word.replace(/\p{P}$/gu, '');
+  return { word: cleanWord, punctuation };
 }
 
-export function transliterate(text) {
-  
-  let result = text.toLowerCase();
+function ipaToFrench(ipa) {
+  const ipaToFrenchMap = {
+    'a': 'a', 'ɑ': 'a', 'e': 'e', 'ɛ': 'e', 'i': 'i', 'o': 'o', 'ɔ': 'o', 'u': 'u', 'y': 'u',
+    'ə': 'e', 'ø': 'eu', 'œ': 'eu',
+    'b': 'b', 'd': 'd', 'f': 'f', 'g': 'g', 'k': 'c', 'l': 'l', 'm': 'm', 'n': 'n',
+    'p': 'p', 'ʁ': 'r', 's': 's', 't': 't', 'v': 'v', 'z': 'z',
+    'ʃ': 'ch', 'ʒ': 'j', 'ɲ': 'gn', 'ŋ': 'ng',
+    'w': 'w', 'ɥ': 'u',
+    'ɑ̃': 'an', 'ɛ̃': 'in', 'ɔ̃': 'on', 'œ̃': 'un'
+  };
+  return ipa.split('').map(char => ipaToFrenchMap[char] || char).join('');
+}
 
-  // Normalization
+function handleSilentLetter(word, ipa, transliteratedWord) {
+  const lastIpaLetter = ipa.slice(-1);
+  const lastFrenchLetter = ipaToFrench(lastIpaLetter);
+  const lastWordLetter = word.slice(-1).toLowerCase();
 
-  // Replace irrational words
-  for (const word in irrationalWords) {
-    result = result.replace(new RegExp(word, 'g'), irrationalWords[word]);
+  if (lastFrenchLetter !== lastWordLetter && silentLetterMap[lastWordLetter]) {
+    return transliteratedWord + silentLetterMap[lastWordLetter] + letterMap['ْ']; // Add silent letter with sukun
+  }
+  return transliteratedWord;
+}
+
+// Check if we're in a browser environment
+const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
+
+// Function to load dictionary file based on environment
+async function loadDictionaryFile(filename) {
+  if (isBrowser) {
+    // Browser environment: use fetch
+    const response = await fetch(`./dict/${filename}`);
+    return await response.json();
+  } else {
+    // Node.js environment: use fs
+    const fs = await import('fs/promises');
+    const filePath = new URL(`./dict/${filename}`, import.meta.url);
+    const fileContent = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(fileContent);
+  }
+}
+
+function transliterateIPA(ipa) {
+  let ipaChars = ipa.split("");
+  ipaChars.forEach((char, index) => {
+    if (char === '̃') {
+      ipaChars[index - 1] = ipaChars[index - 1] + '̃';
+      ipaChars[index] = null;
+    }
+  });
+  ipaChars = ipaChars.filter(Boolean);
+
+  const vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'ə', 'ø', 'œ', 'ɛ', 'ɔ', 'ɑ'];
+  let transliteratedWord = '';
+  for (let i = 0; i < ipaChars.length; i++) {
+    const currentChar = ipaChars[i];
+    const nextChar = ipaChars[i + 1];
+    const nextNextChar = ipaChars[i + 2];
+    const prevChar = i > 0 ? ipaChars[i - 1] : null;
+
+    if (currentChar === 'j' && prevChar === 'i') {
+      continue; // Skip 'j' if it comes after 'i'
+    }
+
+    if (vowels.includes(currentChar) && nextChar === 'n' && !vowels.includes(nextNextChar)) {
+      transliteratedWord += letterMap[currentChar] + letterMap['n'] + 'ّ'; // Add shaddah to ن
+      i++; // Skip the next character (n) as we've already handled it
+    } else if (currentChar === 'ɲ' && nextChar === 'i') {
+      transliteratedWord += 'ن'; // Transliterate 'ɲ' as 'ن' without 'ي' when followed by 'i'
+    } else if (currentChar === 'ɲ') {
+      transliteratedWord += letterMap['ɲ']; // Use the original transliteration for 'ɲ' in other cases
+    } else {
+      transliteratedWord += letterMap[currentChar] || currentChar;
+    }
   }
 
-  // Ils verb
-  result = result.replace(/(ils|elles) ([aàâæbcçdðeéèêëfghijklmnoôœpqrstuùûüvwxyzÿ]+)ent/g, '$1 $2t');
-
-  result = result.replace(/([aeuoiy])n+e/g, '$1ñ');
-
-  result = result.replace(/\bill/g, 'il');
-
-  result = result.replace(/ill/g, 'y');
-
-  result = result.replace(/ph/g, 'f');
-
-  result = result.replace(/([^ ])tion\b/g, '$1śion');
-
-  result = result.replace(/ss/g, 'ś');
-
-  // Remove useless consonants at the end of a word
-  result = result.replace(/([^ ])[bcçdðfghjklpqrstvwxz]t( |$)/g, (match, l1, l2) => `${l1}t${l2}`);
-
-  result = result.replace(/\bre/g, 'reu');
-  result = result.replace(/( |^)([bcdfghjklmnpqrstvxz])e( |$)/g, '$1$2eu$3');
-  result = result.replace(/([bcdfghjklmnpqrstvxz]*)e([bcdfghjklmnpqrstvxz][aàâæeéèêëiîïoôœuùûüyÿ])/g, '$1eu$2');
-
-  // Replace all Xs at the start of a word or following an "e" at the start of a word with "gz"
-  result = result.replace(/\b(e)*x([aàâæeéèêëiîïoôœuùûüyÿ])/g, '$1gz$2');
-
-  // Replace all Xs with "ks"
-  result = result.replace(/x\b/g, 's');
-  result = result.replace(/x/g, 'ks');
-
-  // Replace every e followed by a double consonant with é
-  result = result.replace(/e([bcdfghjklpqrstvxz]{2})/g, 'é$1');
-
-  // S (surrounded by vowels) => Z
-  result = result.replace(new RegExp(`([${extendedVowels}])s([${extendedVowels}])`, 'g'), '$1z$2');
-
-  // Ci, Ce, C' => Si, Se
-  result = result.replace(/c([iîïìíīįeêéèëēėę\'])/g, 's$1');
-
-  // Ç => S
-  result = result.replace(/ç/g, 's');
-
-  // Gi, Ge => Ji, Je
-  result = result.replace(/g([iîïìíīįeêéèëēėę])/g, 'j$1');
-
-  result = result.replace(/gu([iîïìíīįeêéèëēėę])/g, 'ğ$1');
-
-  // Qu => K
-  result = result.replace(/qu*/g, 'k');
-
-  // CH => ş
-  result = result.replace(/ch/g, 'ş');
-  // Remove the remaining h
-  result = result.replace(/h/g, "");
-
-  // C (Not Ch) => K
-  result = result.replace(/c([^h])/g, 'k$1');
-
-  result = result.replace(/oy([aàâæeéèêëiîïoôœuùûüyÿ])/g, 'oiy$1');
-  result = result.replace(/oy/g, 'oi');
-
-  // Replace repeated consonants
-  result = result.replace(/([bcdfghjklmnpqrstvxz])\1/g, '$1');
-
-  result = result.replace(/([^ ]{2,})es( |$)/g, '$1s$2');
-  // End Normalization
-
-  // Replace every "ou" with the corresponding letter
-  result = result.replace(/ou/g, diagraphMap['ou']);
-
-  // Replace every "un" word with "ىَن"
-  result = result.replace(/\bun\b/g, diagraphMap['un']);
-
-  // Replace oBrothers with the letter mapped to "o"
-  result = result.replace(new RegExp(oBrothers.join('|'), 'g'), diagraphMap['au']);
-
-  // Replace aiBrothers with the letter mapped to "ai"
-  result = result.replace(new RegExp(aiBrothers.join('|'), 'g'), diagraphMap['ai']);
-
-  // Replace eu with the letter mapped to "eu"
-  result = result.replace(/eu/g, diagraphMap['eu']);
-
-  // Nasal voices
-
-  // Replace inBrothers not followed by a vowel with the letter mapped to "in"
-  result = result.replace(new RegExp(`${inBrothers.join('|')}([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['in'] + l1);
-
-  // Replace imBrothers not followed by a vowel with the letter mapped to "im"
-  result = result.replace(new RegExp(`${imBrothers.join('|')}([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['im'] + l1);
-
-  // Replace anBrothers not followed by a vowel with the letter mapped to "an"
-  result = result.replace(new RegExp(`${anBrothers.join('|')}([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['an'] + l1);
-
-  // Replace amBrothers not followed by a vowel with the letter mapped to "am"
-  result = result.replace(new RegExp(`${amBrothers.join('|')}([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['am'] + l1);
-
-  // Replace on not followed by a vowel with the letter mapped to "on"
-  result = result.replace(new RegExp(`on([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['on'] + l1);
-
-  // Replace om not followed by a vowel with the letter mapped to "om"
-  result = result.replace(new RegExp(`om([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['om'] + l1);
-
-  // Replace un not followed by a vowel with the letter mapped to "un"
-  result = result.replace(new RegExp(`un([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['un'] + l1);
-
-  // Replace um not followed by a vowel with the letter mapped to "um"
-  result = result.replace(new RegExp(`um([^${vowels.join('|')}])`, 'g'), (match, l1 = "") => diagraphMap['um'] + l1);
-
-  // End Nasal Voices
-
-  result = result.replace(/gne/g, diagraphMap['gn'] + "ّ");
-  result = result.replace(/gn/g, diagraphMap['gn']);
-  result = result.replace(/oi/g, diagraphMap['oi']);
-
-  // Replace every "p", "s", or "t" at the end of a word with its corresponding letter
-  result = result.replace(/([^ ][pst])( |$)/g, (match, l1, l2) => l1 + "ْ" + l2);
-  result = result.replace(/([^ ]e[rz])( |$)/g, (match, l1, l2) => l1 + "ْ" + l2);
-
-  // Remove e at the end of a word
-  result = result.replace(/e\b/g, '');
-
-  // Replace remaining letters with their corresponding Arabic letters
-  result = result.split('').map(char => letterMap[char] || char).join('');
-
-  // Make the extra fixes
-  for(const [letterToFix, replacement] of Object.entries(extraFixes)) {
-    result = result.replace(new RegExp(letterToFix, 'g'), replacement);
+  // Handle 'ɲ' at the end of a word
+  if (ipaChars[ipaChars.length - 1] === 'ɲ') {
+    transliteratedWord += 'ّ'; // Add shaddah
   }
 
-  return result;
+  return transliteratedWord;
+}
+
+export async function transliterate(text) {
+  const cachedFiles = {};
+  const result = [];
+
+  const words = text.split(/\s+/);
+
+  for (let word of words) {
+    const { word: cleanWord, punctuation } = extractPunctuation(word);
+    
+    if (cleanWord.length < 3) {
+      result.push(transliteratePhonetically(cleanWord) + (punctuation[0] || ''));
+      continue;
+    }
+
+    const first3Letters = normalize(cleanWord.slice(0, 3).toLowerCase());
+    const filename = `${first3Letters}.json`;
+
+    if (!cachedFiles[filename]) {
+      try {
+        cachedFiles[filename] = await loadDictionaryFile(filename);
+      } catch(e) {
+        result.push(transliteratePhonetically(cleanWord) + (punctuation[0] || ''));
+        continue;
+      }
+    }
+
+    let transliteratedWord;
+    if(cachedFiles[filename]?.[cleanWord.toLowerCase()]) {
+      const ipaValues = cachedFiles[filename][cleanWord.toLowerCase()].split(',').map(v => v.trim().replaceAll("/", ""));
+      const transliteratedIPAs = ipaValues.map(ipa => transliterateIPA(ipa));
+      
+      transliteratedWord = transliteratedIPAs[0]; // Use the first transliterated IPA as the main one
+      transliteratedWord = handleSilentLetter(cleanWord, ipaValues[0], transliteratedWord);
+
+      // Add alternative transliterated IPA values in parentheses if they exist
+      if (transliteratedIPAs.length > 1) {
+        transliteratedWord += ` (${transliteratedIPAs.slice(1).join(', ')})`;
+      }
+    } else {
+      transliteratedWord = transliteratePhonetically(cleanWord);
+    }
+
+    result.push(transliteratedWord + (punctuation[0] || ''));
+  }
+
+  return result.join(" ");
 }

@@ -1,10 +1,11 @@
 :root {
-    --primary: #3498db;
-    --secondary: #e74c3c;
-    --accent: #f39c12;
-    --background: #ecf0f1;
+    --primary: #004f83;
+    --secondary: #c0392b;
+    --accent: #d35400;
+    --background: #ffffff;
     --text: #2c3e50;
     --white: #ffffff;
+    --border: #bdc3c7;
 }
 
 body {
@@ -19,17 +20,42 @@ body {
     min-height: 100vh;
 }
 
-header {
-    background-color: var(--primary);
-    color: var(--white);
-    text-align: center;
-    padding: 2rem;
+/* Arabic text styling */
+:lang(ar) {
+    font-family: 'Noto Sans Arabic', 'Arabic Typesetting', 'Arial', sans-serif;
+    font-weight: bold;
 }
 
-h1 {
+header {
+    background-color: var(--white);
+    color: var(--primary);
+    text-align: center;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid var(--text);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    max-width: 1000px;
+    height: auto;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+header p {
     margin: 0;
-    font-size: 3rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--text);
+    max-width: 600px;
+    line-height: 1.4;
 }
 
 main {
@@ -42,9 +68,13 @@ main {
 section {
     margin-bottom: 3rem;
     background-color: var(--white);
-    border-radius: 10px;
     padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
 }
 
 #transliteration {
@@ -63,12 +93,13 @@ textarea, .output {
     border: 2px solid var(--primary);
     border-radius: 5px;
     font-size: 1rem;
-    transition: border-color 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-textarea:focus {
+textarea:focus, .output:focus {
     outline: none;
     border-color: var(--accent);
+    box-shadow: 0 0 5px rgba(211, 84, 0, 0.5);
 }
 
 .output {
@@ -81,6 +112,7 @@ h2 {
     border-bottom: 2px solid var(--secondary);
     padding-bottom: 0.5rem;
     font-weight: 600;
+    margin-top: 0;
 }
 
 h3 {
@@ -105,7 +137,7 @@ table {
 }
 
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border);
     padding: 1rem;
     text-align: left;
 }
@@ -127,22 +159,28 @@ tr:nth-child(even) {
 }
 
 tr:hover {
-    background-color: rgba(52, 152, 219, 0.1);
+    background-color: rgba(41, 128, 185, 0.1);
 }
 
 footer {
-    background-color: var(--primary);
-    color: var(--white);
+    background-color: var(--white);
+    color: var(--text);
     text-align: center;
     padding: 1rem;
     width: 100%;
     margin-top: auto;
+    border-top: 2px solid var(--primary);
 }
 
 /* Navigation menu */
 nav {
-    background-color: var(--secondary);
+    background-color: var(--white);
     padding: 1rem;
+    border-bottom: 1px solid var(--text);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 nav ul {
@@ -159,16 +197,17 @@ nav ul li {
 }
 
 nav ul li a {
-    color: var(--white);
+    color: var(--text);
     text-decoration: none;
     font-weight: 600;
     padding: 0.5rem 1rem;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--text);
+    color: var(--white);
 }
 
 /* Responsive styles */
@@ -183,8 +222,12 @@ nav ul li a:hover {
 }
 
 @media (max-width: 768px) {
-    h1 {
-        font-size: 2.5rem;
+    .logo {
+        max-width: 80%;
+    }
+
+    header p {
+        font-size: 1rem;
     }
 
     .input-area {
@@ -209,34 +252,12 @@ nav ul li a:hover {
         padding: 1rem;
     }
 
-    h1 {
-        font-size: 2rem;
+    .logo {
+        max-width: 90%;
     }
 
-    section {
-        padding: 1rem;
-    }
-
-    th, td {
-        padding: 0.5rem;
-    }
-
-    nav ul {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    nav ul li {
-        margin-bottom: 0.5rem;
-    }
-
-    nav ul li a {
-        display: block;
-        text-align: center;
-    }
-
-    table {
-        font-size: 0.7rem;
+    header p {
+        font-size: 0.9rem;
     }
 
     td:nth-child(2) {
@@ -290,4 +311,77 @@ nav ul li a:hover {
         margin-bottom: 1rem;
         height: 120px;
     }
+}
+
+/* Smooth scrolling for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Highlight current section in navigation */
+nav ul li a.active {
+    background-color: var(--secondary);
+    color: var(--white);
+}
+
+/* Add some animation to sections when they come into view */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+section {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Style for code blocks */
+pre {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+code {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9em;
+}
+
+/* Improve readability for long paragraphs */
+p {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* Style blockquotes */
+blockquote {
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+    font-style: italic;
+    color: #555;
+}
+
+/* Add a back-to-top button */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 10px 15px;
+    border-radius: 50%;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.back-to-top.visible {
+    opacity: 1;
 }

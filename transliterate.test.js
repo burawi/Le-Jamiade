@@ -1,45 +1,118 @@
-const transliterate = require('./transliterate');
+import { transliterate } from './transliterate.mjs';
 
-describe('transliterate', () => {
-  test('transliterates single letters correctly', () => {
-    expect(transliterate('a')).toBe('ا');
-    expect(transliterate('b')).toBe('ب');
-    expect(transliterate('f')).toBe('ف');
+// Mock functions for browser and Node.js environments
+global.fetch = jest.fn();
+jest.mock('fs/promises', () => ({
+  readFile: jest.fn(),
+}));
+
+// Helper function to set up the environment
+function setupEnvironment(isBrowser) {
+  if (isBrowser) {
+    delete global.window;
+    global.window = { document: {} };
+    global.fetch.mockClear();
+  } else {
+    delete global.window;
+    jest.resetModules();
+  }
+}
+
+// Mock dictionary data
+const mockDictData = {
+  'chat': '/ʃa/',
+  'chaud': '/ʃo/',
+  'grand': '/gʁɑ̃/',
+  'faux': '/fo/',
+  'est': '/ɛst/, /ɛ/',
+  'plus': '/ply/, /plys/',
+  'fils': '/fis/, /fil/',
+};
+
+describe('transliterate function', () => {
+  beforeEach(() => {
+    jest.resetModules();
   });
 
-  test('transliterates diagraphs correctly', () => {
-    expect(transliterate('ou')).toBe('و');
-    expect(transliterate('ch')).toBe('ش');
-    expect(transliterate('eu')).toBe('ۏ');
+  describe('Browser environment', () => {
+    beforeEach(() => {
+      setupEnvironment(true);
+      global.fetch.mockResolvedValue({
+        json: () => Promise.resolve(mockDictData),
+      });
+    });
+
+    test('transliterates words correctly', async () => {
+      expect(await transliterate('chat')).toBe('شا');
+      expect(await transliterate('chaud')).toBe('شوَ');
+      expect(await transliterate('grand')).toBe('غران');
+      expect(await transliterate('faux')).toBe('فوَ');
+    });
+
+    test('handles words with multiple IPA values', async () => {
+      expect(await transliterate('est')).toBe('ىست (ى)');
+      expect(await transliterate('plus')).toBe('پلۊ (پلۊس)');
+      expect(await transliterate('fils')).toBe('فيس (فيل)');
+    });
+
+    test('handles words not in dictionary', async () => {
+      expect(await transliterate('xyz')).toBe('كسيز');
+    });
+
+    test('handles multiple words', async () => {
+      expect(await transliterate('le chat')).toBe('لى شا');
+      expect(await transliterate('il est plus')).toBe('يل ىست (ى) پلۊ (پلۊس)');
+    });
   });
 
-  test('handles context-dependent transliterations', () => {
-    expect(transliterate('ce')).toBe('سۏ');
-    expect(transliterate('ca')).toBe('كا');
-    expect(transliterate('je')).toBe('جۏ');
-    expect(transliterate('ga')).toBe('غا');
+  describe('Node.js environment', () => {
+    beforeEach(() => {
+      setupEnvironment(false);
+      const fs = require('fs/promises');
+      fs.readFile.mockResolvedValue(JSON.stringify(mockDictData));
+    });
+
+    test('transliterates words correctly', async () => {
+      expect(await transliterate('chat')).toBe('شا');
+      expect(await transliterate('chaud')).toBe('شوَ');
+      expect(await transliterate('grand')).toBe('غران');
+      expect(await transliterate('faux')).toBe('فوَ');
+    });
+
+    test('handles words with multiple IPA values', async () => {
+      expect(await transliterate('est')).toBe('ىست (ى)');
+      expect(await transliterate('plus')).toBe('پلۊ (پلۊس)');
+      expect(await transliterate('fils')).toBe('فيس (فيل)');
+    });
+
+    test('handles words not in dictionary', async () => {
+      expect(await transliterate('xyz')).toBe('كسيز');
+    });
+
+    test('handles multiple words', async () => {
+      expect(await transliterate('le chat')).toBe('لى شا');
+      expect(await transliterate('il est plus')).toBe('يل ىست (ى) پلۊ (پلۊس)');
+    });
   });
 
-  test('handles nasal sounds correctly', () => {
-    expect(transliterate('on')).toBe('وَن');
-    expect(transliterate('an')).toBe('ان');
-    expect(transliterate('in')).toBe('ىن');
-    expect(transliterate("bon")).toBe("بوَن");
-    expect(transliterate("Bonne")).toBe('بوَنّ');
-  });
+  describe('Error handling', () => {
+    test('handles missing dictionary file in browser', async () => {
+      setupEnvironment(true);
+      global.fetch.mockRejectedValue(new Error('File not found'));
+      
+      console.log = jest.fn(); // Mock console.log to catch the error message
+      expect(await transliterate('unknownword')).toBe('ونكنوَونوَرد');
+      expect(console.log).toHaveBeenCalled();
+    });
 
-  test('omits silent letters at the end of words', () => {
-    expect(transliterate('tres')).toBe('ترىسْ');
-    expect(transliterate('ils jouent')).toBe('يلسْ جوتْ');
-  });
-
-  test('transliterates a full sentence', () => {
-    const input = "Bonjour! Je m'appelle Claude.";
-    const expected = "بوَنجور! جۏ م'اپىل كلوَد.";
-    expect(transliterate(input)).toBe(expected);
-  });
-
-  test('transliterates successive consonants', () => {
-    expect(transliterate("c'est")).toBe("س'ىتْ");
+    test('handles missing dictionary file in Node.js', async () => {
+      setupEnvironment(false);
+      const fs = require('fs/promises');
+      fs.readFile.mockRejectedValue(new Error('File not found'));
+      
+      console.log = jest.fn(); // Mock console.log to catch the error message
+      expect(await transliterate('unknownword')).toBe('ونكنوَونوَرد');
+      expect(console.log).toHaveBeenCalled();
+    });
   });
 });

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A tool to transliterate French text to Arabic script",
   "main": "transliterate.js",
+  "type": "module",
   "scripts": {
     "test": "jest"
   },
@@ -10,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "jest": "^27.5.1"
+  },
+  "dependencies": {
+    "unorm": "^1.6.0"
   }
 }
