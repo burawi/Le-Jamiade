@@ -189,7 +189,7 @@ Une lettre Arabe existe déja pour ce son précis, donc pas besoin de complexi
 #### PH ف
 Tout comme le Y greque, le PH est F mais greque, donc son ecriture sera un simple F ف
 
-#### EU ۏ 
+#### EU ۏ
 Déja cité parmis les voyelles, le EU son sera ecrit ۏ
 
 #### AU & EAU وَ

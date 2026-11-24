@@ -1,5 +1,6 @@
-// Import the transliterate function from transliterate.js
 import { transliterate } from './transliterate.mjs';
+
+const SAMPLE_TEXT = "Le français voyage, se transforme et crée des ponts entre les cultures.";
 
 // Fonction pour obtenir les exemples de phrases françaises correctes
 function getExampleSentences() {
@@ -19,7 +20,9 @@ function getExampleSentences() {
 
 // Fonction pour peupler le tableau d'exemples
 async function populateExamples() {
-  const exampleTable = document.getElementById('example-table').getElementsByTagName('tbody')[0];
+  const table = document.getElementById('example-table');
+  if (!table) return;
+  const exampleTable = table.getElementsByTagName('tbody')[0];
   const examples = getExampleSentences();
   for (const example of examples) {
     const row = exampleTable.insertRow();
@@ -27,6 +30,8 @@ async function populateExamples() {
     const cell2 = row.insertCell(1);
     cell1.textContent = example;
     cell2.textContent = await transliterate(example);
+    cell2.lang = 'ar';
+    cell2.dir = 'rtl';
   }
 }
 
@@ -60,7 +65,7 @@ async function generateLetterExample(jamiadeLetter, latinEquivalent) {
 
   const letterWords = words[jamiadeLetter] || words[latinEquivalent.toLowerCase()];
   if (letterWords && letterWords.length > 0) {
-    const word = letterWords[Math.floor(Math.random() * letterWords.length)];
+    const word = letterWords[0];
     return `${word} → ${await transliterate(word)}`;
   } else {
     return `No example available for '${jamiadeLetter}'`;
@@ -107,7 +112,10 @@ async function populateLetterSummary() {
 
   for (const { jamiade, latin } of jamiadeLetters) {
     const row = tbody.insertRow();
-    row.insertCell(0).textContent = jamiade;
+    const jamiadeCell = row.insertCell(0);
+    jamiadeCell.textContent = jamiade;
+    jamiadeCell.lang = 'ar';
+    jamiadeCell.dir = 'rtl';
     row.insertCell(1).textContent = getPronunciation(jamiade, latin);
     row.insertCell(2).textContent = await generateLetterExample(jamiade, latin);
   }
@@ -137,7 +145,7 @@ function getPronunciation(jamiadeLetter, latinEquivalent) {
     'ۊ': '[y] comme dans "tu"',
     'ڤ': '[v] comme dans "vent"',
     'و': '[u] comme dans "vous" ou [w] comme dans "kiwi"',
-    'ى': '[e] comme dans "été ou [ɛ] comme dans "mais"',
+    'ى': '[e] comme dans "été" ou [ɛ] comme dans "mais"',
     'ز': '[z] comme dans "zoo"'
   };
   return pronunciations[jamiadeLetter] || `[${latinEquivalent.toLowerCase()}] comme dans "${latinEquivalent.toLowerCase()}at"`;
@@ -162,7 +170,7 @@ async function generateDigraphExample(digraph) {
 
   const digraphWords = words[digraph.toLowerCase()];
   if (digraphWords && digraphWords.length > 0) {
-    const word = digraphWords[Math.floor(Math.random() * digraphWords.length)];
+    const word = digraphWords[0];
     return `${word} → ${await transliterate(word)}`;
   } else {
     return `No example available for '${digraph}'`;
@@ -171,7 +179,9 @@ async function generateDigraphExample(digraph) {
 
 // Fonction pour peupler le tableau des digrammes
 async function populateDigraphs() {
-  const digraphsTable = document.getElementById('digraphs-table').getElementsByTagName('tbody')[0];
+  const table = document.getElementById('digraphs-table');
+  if (!table) return;
+  const digraphsTable = table.getElementsByTagName('tbody')[0];
   const digraphPronunciations = {
     'ou': '[u] comme dans "vous"',
     'ch': '[ʃ] comme dans "chat"',
@@ -247,17 +257,121 @@ async function populateSpecialRules() {
 }
 
 // Translittération en temps réel
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const input = document.getElementById('input');
   const output = document.getElementById('output');
+  const characterCount = document.getElementById('character-count');
+  const status = document.getElementById('translation-status');
+  const sampleButton = document.getElementById('sample-button');
+  const clearButton = document.getElementById('clear-button');
+  const copyButton = document.getElementById('copy-button');
+  const currentYear = document.getElementById('current-year');
+  const backToTop = document.querySelector('.back-to-top');
 
-  input.addEventListener('input', async () => {
-    output.textContent = await transliterate(input.value);
+  let debounceTimer;
+  let translationRequest = 0;
+
+  const updateCharacterCount = () => {
+    const count = input.value.length;
+    characterCount.textContent = `${count} caractère${count > 1 ? 's' : ''}`;
+  };
+
+  const renderTranslation = async () => {
+    const text = input.value;
+    const request = ++translationRequest;
+
+    if (!text.trim()) {
+      output.textContent = '';
+      status.textContent = 'Prêt';
+      copyButton.disabled = true;
+      return;
+    }
+
+    status.textContent = 'Translittération…';
+    try {
+      const result = await transliterate(text);
+      if (request !== translationRequest) return;
+      output.textContent = result;
+      status.textContent = 'Terminé';
+      copyButton.disabled = !result;
+    } catch (error) {
+      if (request !== translationRequest) return;
+      output.textContent = '';
+      status.textContent = 'Une erreur est survenue';
+      copyButton.disabled = true;
+      console.error('Transliteration failed:', error);
+    }
+  };
+
+  const scheduleTranslation = () => {
+    window.clearTimeout(debounceTimer);
+    updateCharacterCount();
+    debounceTimer = window.setTimeout(renderTranslation, 180);
+  };
+
+  input.addEventListener('input', scheduleTranslation);
+
+  sampleButton.addEventListener('click', () => {
+    input.value = SAMPLE_TEXT;
+    updateCharacterCount();
+    renderTranslation();
+    input.focus();
   });
 
-  // Peupler les tableaux et les règles
-  populateLetterSummary();
-  populateDigraphs();
-  populateSpecialRules();
-  populateExamples();
+  clearButton.addEventListener('click', () => {
+    input.value = '';
+    updateCharacterCount();
+    renderTranslation();
+    input.focus();
+  });
+
+  copyButton.addEventListener('click', async () => {
+    if (!output.textContent) return;
+    try {
+      await navigator.clipboard.writeText(output.textContent);
+      copyButton.textContent = 'Copié';
+      window.setTimeout(() => { copyButton.textContent = 'Copier le résultat'; }, 1600);
+    } catch (error) {
+      status.textContent = 'Copie indisponible';
+      console.error('Copy failed:', error);
+    }
+  });
+
+  if (currentYear) currentYear.textContent = new Date().getFullYear();
+
+  const updateBackToTop = () => {
+    backToTop?.classList.toggle('visible', window.scrollY > 700);
+  };
+  window.addEventListener('scroll', updateBackToTop, { passive: true });
+  updateBackToTop();
+
+  const navLinks = [...document.querySelectorAll('nav a[href^="#"]')];
+  const observedSections = navLinks
+    .map((link) => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${visible.target.id}`);
+      });
+    }, { rootMargin: '-25% 0px -65%', threshold: [0, 0.2, 0.5] });
+    observedSections.forEach((section) => observer.observe(section));
+  }
+
+  updateCharacterCount();
+
+  const populationResults = await Promise.allSettled([
+    populateLetterSummary(),
+    populateDigraphs(),
+    populateSpecialRules(),
+    populateExamples()
+  ]);
+  populationResults
+    .filter(({ status: resultStatus }) => resultStatus === 'rejected')
+    .forEach(({ reason }) => console.error('Content population failed:', reason));
 });

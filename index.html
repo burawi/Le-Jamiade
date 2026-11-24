@@ -1,44 +1,160 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Jamiade - Translittération du Français vers l'Arabe</title>
+    <title>Le Jamiade — Translittérateur français en alphabet arabe</title>
+    <meta name="description" content="Découvrez Le Jamiade et translittérez gratuitement du français vers un alphabet arabe adapté à ses sons grâce à un dictionnaire phonétique.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="theme-color" content="#123e46">
+    <link rel="canonical" href="https://burawi.github.io/Le-Jamiade/">
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="sitemap.xml">
+    <link rel="icon" href="logo/logo.png" type="image/png">
+
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:title" content="Le Jamiade — Le français en alphabet arabe">
+    <meta property="og:description" content="Un système phonétique et un outil gratuit pour écrire le français avec un alphabet arabe adapté.">
+    <meta property="og:url" content="https://burawi.github.io/Le-Jamiade/">
+    <meta property="og:image" content="https://burawi.github.io/Le-Jamiade/logo/logo.png">
+    <meta property="og:image:width" content="600">
+    <meta property="og:image:height" content="995">
+    <meta property="og:image:alt" content="Emblème du projet Le Jamiade">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Le Jamiade — Le français en alphabet arabe">
+    <meta name="twitter:description" content="Découvrez le système et essayez le translittérateur phonétique en ligne.">
+
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Le Jamiade",
+      "url": "https://burawi.github.io/Le-Jamiade/",
+      "description": "Un système phonétique et un translittérateur pour écrire le français avec un alphabet arabe adapté.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "fr",
+      "isAccessibleForFree": true
+    }
+    </script>
 </head>
 <body>
-    <header>
-        <img src="logo/cover.png" alt="Le Jamiade" class="logo">
-        <p>Ecrivons le Français en Abjad - <span lang="ar">ىكريڤوَنزْ لۏ فرانسىزْ ان ابجاد</span></p>
+    <a class="skip-link" href="#main-content">Aller au contenu</a>
+
+    <header class="site-header">
+        <div class="header-shell">
+            <a class="brand" href="#top" aria-label="Le Jamiade — accueil">
+                <img src="logo/cover.png" alt="Le Jamiade" width="1000" height="138">
+            </a>
+            <nav aria-label="Navigation principale">
+                <a href="#transliteration">Translittérateur</a>
+                <a href="#comprendre">Découvrir</a>
+                <a href="#alphabet">Alphabet</a>
+                <a href="#resume">Référence</a>
+            </nav>
+        </div>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="#transliteration">Essayez-le</a></li>
-            <li><a href="#presentation">Présentation</a></li>
-            <li><a href="#resume">Résumé</a></li>
-            <li><a href="#rules">Règles</a></li>
-            <li><a href="#examples">Exemples</a></li>
-        </ul>
-    </nav>
-
-    <main>
-        <section id="transliteration">
-            <h2>Essayez-le !</h2>
-            <div class="input-area">
-                <textarea id="input" placeholder="Entrez votre texte en français ici..."></textarea>
-                <div id="output" class="output" lang="ar" dir="rtl"></div>
+    <main id="main-content">
+        <section class="hero" id="top" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow">Langue française · écriture arabe</p>
+                <h1 id="hero-title">Le français,<br><em>autrement.</em></h1>
+                <p class="hero-lede">Le Jamiade est un système d'écriture phonétique pensé pour représenter les sons du français avec un alphabet arabe adapté.</p>
+                <div class="hero-actions">
+                    <a class="button button-primary" href="#transliteration">Essayer le translittérateur</a>
+                    <a class="button button-ghost" href="#comprendre">Comprendre le projet</a>
+                </div>
+                <ul class="hero-facts">
+                    <li><strong>Phonétique</strong><span>Basé sur la prononciation</span></li>
+                    <li><strong>Gratuit</strong><span>Accessible dans le navigateur</span></li>
+                    <li><strong>Documenté</strong><span>Alphabet et règles expliqués</span></li>
+                </ul>
+            </div>
+            <div class="hero-visual" aria-hidden="true">
+                <div class="hero-script" lang="ar" dir="rtl">لۏ جامياد</div>
+                <img src="logo/logo.png" alt="" width="600" height="995">
             </div>
         </section>
 
-        <section id="presentation">
-            <h2>Qu'est-ce que Le Jamiade ?</h2>
+        <section class="translator-section" id="transliteration" aria-labelledby="translator-title">
+            <div class="section-heading section-heading-light">
+                <p class="eyebrow">Essayez maintenant</p>
+                <h2 id="translator-title">Du français au Jamiade</h2>
+                <p>Écrivez une phrase : le dictionnaire phonétique produit la translittération au fil de votre saisie.</p>
+            </div>
+            <div class="translator-card">
+                <div class="translator-panel">
+                    <div class="panel-heading">
+                        <label for="input">Texte français</label>
+                        <span id="character-count">0 caractère</span>
+                    </div>
+                    <textarea id="input" rows="8" placeholder="Écrivez votre texte en français…" spellcheck="true" autocomplete="off"></textarea>
+                    <div class="panel-actions">
+                        <button class="text-button" id="sample-button" type="button">Insérer un exemple</button>
+                        <button class="text-button" id="clear-button" type="button">Effacer</button>
+                    </div>
+                </div>
+                <div class="translator-direction" aria-hidden="true">→</div>
+                <div class="translator-panel output-panel">
+                    <div class="panel-heading">
+                        <span id="output-label">Texte jamiade</span>
+                        <span id="translation-status" role="status">Prêt</span>
+                    </div>
+                    <div id="output" class="output" lang="ar" dir="rtl" aria-labelledby="output-label" aria-live="polite" tabindex="0"></div>
+                    <div class="panel-actions panel-actions-end">
+                        <button class="text-button" id="copy-button" type="button" disabled>Copier le résultat</button>
+                    </div>
+                </div>
+            </div>
+            <p class="privacy-note">Le traitement s'effectue dans votre navigateur, sans compte et sans API de traduction.</p>
+        </section>
+
+        <section class="overview" id="comprendre" aria-labelledby="overview-title">
+            <div class="section-heading">
+                <p class="eyebrow">Une autre façon de lire</p>
+                <h2 id="overview-title">Un alphabet conçu pour les sons du français</h2>
+            </div>
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <span class="feature-number">01</span>
+                    <h3>Fidèle à l'oral</h3>
+                    <p>Le système part de la prononciation plutôt que de reproduire les irrégularités de l'orthographe française.</p>
+                </article>
+                <article class="feature-card">
+                    <span class="feature-number">02</span>
+                    <h3>Précis sans être lourd</h3>
+                    <p>Des lettres et diacritiques distincts représentent les voyelles et consonnes absentes de l'arabe standard.</p>
+                </article>
+                <article class="feature-card">
+                    <span class="feature-number">03</span>
+                    <h3>Une passerelle culturelle</h3>
+                    <p>Le Jamiade explore ce qui devient possible lorsque deux traditions d'écriture se rencontrent.</p>
+                </article>
+            </div>
+        </section>
+
+        <div class="reading-layout">
+            <aside class="table-of-contents" aria-label="Sommaire du guide">
+                <p class="toc-label">Dans ce guide</p>
+                <a href="#presentation">Présentation</a>
+                <a href="#interet">Pourquoi ?</a>
+                <a href="#alphabet">Le nouvel alphabet</a>
+                <a href="#digrammes">Les digrammes</a>
+                <a href="#nasales">Les sons nasaux</a>
+            </aside>
+
+        <article id="presentation" class="prose">
+            <header class="article-header">
+                <p class="eyebrow">Le projet en détail</p>
+                <h2>Qu'est-ce que Le Jamiade&nbsp;?</h2>
+            </header>
             <p>Le Jamiade est un système unique de représentation de la langue française en écriture arabe. Il s'inspire de l'Aljamiado, une méthode historiquement utilisée pour écrire les langues romanes en utilisant l'alphabet arabe.</p>
             <p>Bien qu'inspiré de l'Aljamiado, pendant la conception du système, les spécificités de la langue française ont été prises en compte, comme par exemple le fait de devoir écrire toutes les voyelles, on y reviendra en détail.</p>
             <p>Quelques règles de l'orthographe ont été reprises de l'alphabet romain (latin), comme le maintien de l'écriture des lettres muettes en fin de mot, et d'autres ont été délaissées comme le "Ph" qui fusionnera avec le "F" en une seule lettre. On pourrait alors considérer ce travail comme une petite remise en question de ces règles.</p>
 
-            <h2>Quel intérêt ?</h2>
+            <h2 id="interet">Quel intérêt&nbsp;?</h2>
             <p>On pourrait se dire quel intérêt à fournir cet effort ? Eh bien, nous avons une réponse à cette question. La voici :</p>
 
             <h3>En général</h3>
@@ -50,7 +166,7 @@
             <h3>La communauté musulmane de France</h3>
             <p>Une autre communauté française pourrait trouver un intérêt à ce travail : celle des musulmans français qui sont intéressés par l'apprentissage de la langue arabe et la lecture du Coran. Cette communauté qui se trouve face à un double obstacle qui est celui d'apprendre l'alphabet arabe, puis lire des mots d'une langue qu'ils ne comprennent pas pourrait voir en ce travail une facilitation de la tâche en faisant en sorte qu'ils apprennent d'abord l'alphabet en l'appliquant à une langue déjà connue, qui est leur langue maternelle le français, puis s'attaquant à la tâche la plus dure qui est d'apprendre une nouvelle langue.</p>
 
-            <h2>Le nouvel alphabet</h2>
+            <h2 id="alphabet">Le nouvel alphabet</h2>
             <p>Ou appelons-le "Le nouvel abjad" !</p>
             <p>Bien évidemment, le nouvel abjad se base sur l'abjad arabe en reprenant les mêmes lettres qui produisent le même son pour écrire le français. Mais vu les spécificités du français quelques retouches ont été pensées, on peut catégoriser les retouches ainsi :</p>
             <ul>
@@ -64,27 +180,35 @@
             <h3>Lettres reprises normalement</h3>
             <p>Commençons par les lettres dont leur reprise telle qu'elles sont ne pose aucun souci. Sans s'attarder sur ce point.</p>
             <p>On cite ces lettres avec leurs équivalents respectifs :</p>
+            <div class="table-scroll" tabindex="0">
             <table>
+                <tbody>
                 <tr>
                     <th>A</th><th>B</th><th>D</th><th>F</th><th>I</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>Z</th>
                 </tr>
                 <tr>
                     <td>ا</td><td>ب</td><td>د</td><td>ف</td><td>ي</td><td>ج</td><td>ك</td><td>ل</td><td>م</td><td>ن</td><td>ز</td>
                 </tr>
+                </tbody>
             </table>
+            </div>
 
             <h3>Les voyelles</h3>
             <p>Alors que le français comporte une bonne liste de voyelles, l'arabe a, quant à elle, seulement 3 voyelles à l'écrit étant donné la structure de langue. Cette limite a longtemps été reprise comme argument contre l'adoption du système d'écriture pour des langues dans lesquelles les voyelles ont une importance de premier ordre. Mais heureusement que la solution est très facile et nombreuses sont les langues qui sont très différentes de l'arabe, qui ont adopté ce système d'écriture, et qui se portent bien depuis des siècles. Le français ne fera pas l'exception.</p>
             <p>Pour l'adaptation, on se servira des mêmes outils que l'humanité s'en servit depuis la nuit des temps et dans tous les systèmes d'écriture, on parle bien sûr des points et des accents. En abjad on utilisera plutôt les diacritiques (appelés harakat en arabe) puisqu'ils n'auront plus l'utilité qu'ils ont en arabe, mais on y reviendra plus tard.</p>
             <p>Donc, en ajoutant quelques points et quelques accents, la liste des voyelles du Jamiade, non existantes en arabe, ressemble à ceci :</p>
+            <div class="table-scroll" tabindex="0">
             <table>
+                <tbody>
                 <tr>
                     <th>E</th><th>É</th><th>U</th><th>OU</th><th>O</th>
                 </tr>
                 <tr>
                     <td>ۏ</td><td>ى</td><td>ۊ</td><td>و</td><td>وَ</td>
                 </tr>
+                </tbody>
             </table>
+            </div>
             <p>Ce choix nécessite quelques explications :</p>
 
             <h4>E</h4>
@@ -100,10 +224,10 @@
             <p>On regroupera le e culbuté et le eu car ils sont très proches phonétiquement parlant et facilement distinguables selon le mot et le contexte, surtout qu'on a décidé de maintenir l'écriture des liaisons. On l'écrira alors ۏ. Et pour donner plus de contrôle aux plus minutieux d'entre nous on permettra un ۏَ avec une barre horizontale au-dessus, aussi appelé fatha (ouverture) en arabe, pour préciser le "eu" du simple e culbuté. Et on ira un peu plus loin avec 2 barres pour une plus grande précision pour indiquer que notre eu est mi-ouvert (œ). On écrira alors ۏً.</p>
             <p>Ce qui donne en résumé :</p>
             <ul>
-                <li>Je => جۏ</li>
-                <li>Jeu => جۏ ou جۏَ Pour plus de précision</li>
-                <li>Jeûne => جۏن ou جۏَن</li>
-                <li>Jeune => جۏن ou جۏًن</li>
+                <li>Je =&gt; جۏ</li>
+                <li>Jeu =&gt; جۏ ou جۏَ Pour plus de précision</li>
+                <li>Jeûne =&gt; جۏن ou جۏَن</li>
+                <li>Jeune =&gt; جۏن ou جۏًن</li>
             </ul>
             <p>On remarque ici que Jeûne et Jeune peuvent tous les deux s'écrire جۏن, mais en cas de précision chacune prend une forme distincte de l'autre. Du coup, Jeûne ne s'écrit jamais جۏًن et Jeune ne s'écrit jamais جۏَن.</p>
 
@@ -180,7 +304,7 @@
             <p>Son écriture sera alors ainsi :</p>
             <ul>
                 <li>H muet : Il ne s'écrira pas</li>
-                <li>H aspiré : Sera écrit ه comme dans : Ils hurlent => يلسْ هۊرلتْ</li>
+                <li>H aspiré : Sera écrit ه comme dans : Ils hurlent =&gt; يلسْ هۊرلتْ</li>
             </ul>
 
             <h4>La lettre Q</h4>
@@ -221,7 +345,7 @@
             <h4>La lettre Y</h4>
             <p>Le Y, comme son nom l'indique, est un I mais il est grec. Donc on l'écrira ي tout comme le I</p>
 
-            <h3>Les digrammes</h3>
+            <h3 id="digrammes">Les digrammes</h3>
             <p>Les digrammes sont les sons représentés en deux lettres, ou même plus. On compte en français plus d'une dizaine qu'on liste ici avec leur écriture en Jamiade.</p>
 
             <h4>OU و</h4>
@@ -236,7 +360,7 @@
             <h4>EU ۏ</h4>
             <p>Déjà cité parmi les voyelles, le son EU sera écrit ۏ</p>
 
-            <h4>AU & EAU وَ</h4>
+            <h4>AU &amp; EAU وَ</h4>
             <p>Le AU et EAU sont des O, on les écrira وَ</p>
 
             <h4>AI, É, È, Ê ى</h4>
@@ -246,17 +370,17 @@
             <p>Nous avons deux cas de figure du GN :</p>
             <ul>
                 <li>GN prononcé G + N : Comme dans stagner, sera écrit comme prononcé غن</li>
-                <li>GN prononcé ɲ : Comme dans campagnard sera écrit ني => كامپانيارتْ, et une chadda sur le ي si le GN se place à la fin d'un mot pour distinguer son son du I on écrira donc campagne كامپانيّ et compagnie كامپاني</li>
+                <li>GN prononcé ɲ : Comme dans campagnard sera écrit ني =&gt; كامپانيارتْ, et une chadda sur le ي si le GN se place à la fin d'un mot pour distinguer son son du I on écrira donc campagne كامپانيّ et compagnie كامپاني</li>
             </ul>
 
             <h4>ILL ي</h4>
             <p>Encore deux cas :</p>
             <ul>
                 <li>ILL prononcé I + L : Comme dans illustration, sera écrit normalement يل</li>
-                <li>ILL prononcé comme un y : Sera écrit ي, famille => فامي</li>
+                <li>ILL prononcé comme un y : Sera écrit ي, famille =&gt; فامي</li>
             </ul>
 
-            <h3>Les sons nasaux</h3>
+            <h3 id="nasales">Les sons nasaux</h3>
             <p>Il existe quatre sons nasaux en français :</p>
             <ul>
                 <li>ɑ̃ : écrit an, en, am, et em.</li>
@@ -266,31 +390,37 @@
             </ul>
             <p>On les écrira de cette façon :</p>
             <ul>
-                <li>ɑ̃ : ان ce qui donne : chanter => شانتىرْ, prendre => پراندر</li>
-                <li>ɔ̃ : وَن ce qui donne : Bon => بوَن</li>
-                <li>ɛ̃ : ىن ce qui donne : Frein => فرىن</li>
-                <li>œ̃ : ىَن ce qui donne : Un => ىَن (Ceci est juste un ى avec une barre au-dessus vu que ce son est difficilement différenciable du ɛ̃)</li>
+                <li>ɑ̃ : ان ce qui donne : chanter =&gt; شانتىرْ, prendre =&gt; پراندر</li>
+                <li>ɔ̃ : وَن ce qui donne : Bon =&gt; بوَن</li>
+                <li>ɛ̃ : ىن ce qui donne : Frein =&gt; فرىن</li>
+                <li>œ̃ : ىَن ce qui donne : Un =&gt; ىَن (Ceci est juste un ى avec une barre au-dessus vu que ce son est difficilement différenciable du ɛ̃)</li>
             </ul>
 
-            <h4>N & M ن م</h4>
+            <h4>N &amp; M ن م</h4>
             <p>Même si le son nasal est suivi d'un P ou d'un B on écrira toujours ن </p>
             <ul>
-                <li>Sombre => سوَنبر</li>
-                <li>Chambre => شوَنبر</li>
-                <li>Timbre => تىنبر</li>
-                <li>Humble => ىَنبل</li>
+                <li>Sombre =&gt; سوَنبر</li>
+                <li>Chambre =&gt; شوَنبر</li>
+                <li>Timbre =&gt; تىنبر</li>
+                <li>Humble =&gt; ىَنبل</li>
             </ul>
 
             <h4>Note</h4>
             <p>On ajoutera une chadda sur le ن pour préciser que ce ن n'est pas nasal :</p>
             <ul>
-                <li>Bon => بوَن</li>
-                <li>Bonne => بوَنّ</li>
+                <li>Bon =&gt; بوَن</li>
+                <li>Bonne =&gt; بوَنّ</li>
             </ul>
-        </section>
+        </article>
+        </div>
 
-        <section id="resume">
-            <h2>Résumé de l'Abjad Jamiade</h2>
+        <section id="resume" class="reference-section">
+            <div class="section-heading">
+                <p class="eyebrow">Aide-mémoire</p>
+                <h2>Résumé de l'Abjad Jamiade</h2>
+                <p>Retrouvez les lettres et les principaux groupes de sons avec leur prononciation et un exemple généré.</p>
+            </div>
+            <div class="table-scroll" tabindex="0">
             <table id="jamiade-letters">
                 <thead>
                     <tr>
@@ -303,17 +433,42 @@
                     <!-- Le contenu sera ajouté dynamiquement par JavaScript -->
                 </tbody>
             </table>
+            </div>
+
+            <h3 class="reference-subtitle">Les principaux digrammes</h3>
+            <div class="table-scroll" tabindex="0">
+            <table id="digraphs-table">
+                <thead>
+                    <tr>
+                        <th>Groupe</th>
+                        <th>Prononciation</th>
+                        <th>Exemple</th>
+                        <th>Variantes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Le contenu sera ajouté dynamiquement par JavaScript -->
+                </tbody>
+            </table>
+            </div>
         </section>
 
-        <section id="rules">
-            <h2>Règles Spéciales</h2>
+        <section id="rules" class="rules-section">
+            <div class="section-heading">
+                <p class="eyebrow">Principes essentiels</p>
+                <h2>Règles spéciales</h2>
+            </div>
             <ol id="special-rules">
                 <!-- Les règles seront ajoutées dynamiquement par JavaScript -->
             </ol>
         </section>
 
-        <section id="examples">
-            <h2>Exemples de Translittération</h2>
+        <section id="examples" class="examples-section">
+            <div class="section-heading">
+                <p class="eyebrow">Pour commencer</p>
+                <h2>Exemples de translittération</h2>
+            </div>
+            <div class="table-scroll" tabindex="0">
             <table id="example-table">
                 <thead>
                     <tr>
@@ -325,12 +480,26 @@
                     <!-- Les exemples seront ajoutés dynamiquement par JavaScript -->
                 </tbody>
             </table>
+            </div>
         </section>
     </main>
 
-    <footer>
-        <p>&copy; 2023 Projet Le Jamiade</p>
+    <footer class="site-footer">
+        <div class="footer-shell">
+            <div>
+                <img src="logo/cover.png" alt="Le Jamiade" width="1000" height="138">
+                <p>Écrivons le français en Abjad — <span lang="ar" dir="rtl">ىكريڤوَنزْ لۏ فرانسىزْ ان ابجاد</span></p>
+            </div>
+            <div class="footer-links">
+                <a href="#transliteration">Translittérateur</a>
+                <a href="#presentation">Le projet</a>
+                <a href="https://github.com/burawi/Le-Jamiade">Code source</a>
+            </div>
+        </div>
+        <p class="footer-meta">Projet Le Jamiade · <span id="current-year">2026</span></p>
     </footer>
+
+    <a class="back-to-top" href="#top" aria-label="Revenir en haut">↑</a>
 
     <script type="module" src="script.js"></script>
 </body>

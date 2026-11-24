@@ -162,7 +162,7 @@ export async function transliterate(text) {
 
   for (let word of words) {
     const { word: cleanWord, punctuation } = extractPunctuation(word);
-    
+
     if (cleanWord.length < 3) {
       result.push(transliteratePhonetically(cleanWord) + (punctuation[0] || ''));
       continue;
@@ -184,7 +184,7 @@ export async function transliterate(text) {
     if(cachedFiles[filename]?.[cleanWord.toLowerCase()]) {
       const ipaValues = cachedFiles[filename][cleanWord.toLowerCase()].split(',').map(v => v.trim().replaceAll("/", ""));
       const transliteratedIPAs = ipaValues.map(ipa => transliterateIPA(ipa));
-      
+
       transliteratedWord = transliteratedIPAs[0]; // Use the first transliterated IPA as the main one
       transliteratedWord = handleSilentLetter(cleanWord, ipaValues[0], transliteratedWord);
 
